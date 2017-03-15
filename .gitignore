@@ -1,0 +1,8 @@
+/node_modules/*
+
+# Coveralls
+coverage
+
+/client2/
+
+config.json
