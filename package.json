@@ -9,7 +9,8 @@
         "test-ci": "istanbul cover node_modules/mocha/bin/_mocha -- --compilers ts:ts-node/register ./build/**/*.spec.js --check-leaks",
         "start": "npm run build:live",
         "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
-        "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/"
+        "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/",
+        "coverage:remap": "remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info --exclude node_modules --type lcovonly"
     },
     "author": "",
     "license": "ISC",

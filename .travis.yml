@@ -2,5 +2,5 @@ language: node_js
 node_js:
   - "6"
   - "6.1"
-script: "sh travis-test.sh"
+script: "npm run build && npm run test-ci && npm run coverage:remap"
 after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"

@@ -14,7 +14,7 @@ export type JwtBody = {
 }
 
 export class Auth {
-    public static sign(data: string | object | JwtBody): Promise<string> {
+    public static sign(data: string | JwtBody): Promise<string> {
         return new Promise((resolve, reject) => {
             let options: jwt.SignOptions = {
                 algorithm: "HS512",
@@ -33,7 +33,7 @@ export class Auth {
         });
     }
 
-    public static verify(token: string): Promise<object | string> {
+    public static verify(token: string): Promise<JwtBody | string> {
         return new Promise((resolve, reject) => {
             let options: jwt.VerifyOptions = {
                 algorithms: ["HS512"],
