@@ -2,3 +2,5 @@ instrumentation:
   excludes:
     - '*.spec.js'
     - '*.spec.ts'
+    - 'build/**/*.spec.js'
+    - 'build/**/*.spec.ts'
