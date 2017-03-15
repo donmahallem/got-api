@@ -1,0 +1,3 @@
+--compilers ts:ts-node/register
+--check-leaks
+--timeout 10000
