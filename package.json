@@ -5,12 +5,11 @@
     "main": "index.js",
     "scripts": {
         "test": "mocha -r ts-node/register src/**/*.spec.ts --check-leaks",
-        "test-ci": "istanbul cover node_modules/mocha/bin/_mocha  --report lcovonly --  --timeout 10000 -r ts-node/register src/**/*.spec.ts --check-leaks",
+        "test-ci": "istanbul cover node_modules/mocha/bin/_mocha  --report lcovonly -- --timeout 10000 -r ts-node/register src/**/*.spec.ts --check-leaks",
         "start": "npm run build:live",
         "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
         "build": "node ./node_modules/typescript/bin/tsc --outdir ./dist/ --baseUrl ./src/",
-        "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/",
-        "test-ci": "istanbul cover node_modules/mocha/bin/_mocha  --report lcovonly --  --timeout 10000 --recursive --reporter spec --check-leaks test/"
+        "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/"
     },
     "author": "",
     "license": "ISC",
