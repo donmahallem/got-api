@@ -4,11 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "mocha -r ts-node/register src/**/*.spec.ts --check-leaks",
-        "test-ci": "istanbul cover node_modules/mocha/bin/_mocha  --report lcovonly -- --timeout 10000 -r ts-node/register src/**/*.spec.ts --check-leaks",
+        "test": "mocha --compilers ts:ts-node/register src/**/*.spec.ts --check-leaks",
+        "build": "tsc --sourceMap --outDir ./build/",
+        "test-ci": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter mocha-lcov-reporter --compilers ts:ts-node/register ./build/**/*.spec.js --check-leaks",
         "start": "npm run build:live",
         "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
-        "build": "node ./node_modules/typescript/bin/tsc --outdir ./dist/ --baseUrl ./src/",
         "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/"
     },
     "author": "",
@@ -58,6 +58,7 @@
         "karma-sinon": "^1.0.5",
         "mocha": "^3.2.0",
         "nodemon": "^1.11.0",
+        "remap-istanbul": "^0.9.1",
         "sinon": "^1.17.7",
         "sinon-chai": "^2.8.0",
         "ts-node": "^2.1.0",

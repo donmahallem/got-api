@@ -49,4 +49,8 @@ export class Auth {
             })
         });
     }
+
+    public static tt(): boolean {
+        return true;
+    }
 }

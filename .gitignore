@@ -6,3 +6,5 @@ coverage
 /client2/
 
 config.json
+
+/build/*
