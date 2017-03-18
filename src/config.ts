@@ -31,6 +31,10 @@ export class Config {
         return Config.nconf.get("reddit:clientId");
     }
 
+    public static set redditClientId(redditClientId: string) {
+
+    }
+
     /**
      * gets the reddit client secret
      */
@@ -40,6 +44,9 @@ export class Config {
 
     public static get redditRedirectUri(): string {
         return Config.nconf.get("reddit:redirectUri");
+    }
+    public static set redditRedirectUri(redditRedirectUri: string) {
+
     }
 
     public static get jwtSecret(): string {

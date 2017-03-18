@@ -1,8 +1,8 @@
 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
 
 import * as express from "express";
-import * as redditAuth from "./oauth/reddit";
+import * as redditRouter from "./oauth/reddit";
 
-let router = express.Router();
-router.use("/api", redditAuth);
-export = router;
+let apiRouter = express.Router();
+apiRouter.use("/api", redditRouter);
+export = apiRouter;
