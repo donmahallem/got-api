@@ -2,7 +2,11 @@ import { Config } from "./../config";
 import { Auth } from "./auth";
 import {
     RedditUser,
-    ExchangeTokenResponse
+    ExchangeTokenResponse,
+    RedditThing,
+    RedditSelftext,
+    RedditSubmission,
+    RedditSubmissionListing
 } from "./../models/reddit";
 import * as https from "https";
 export enum Scope {
@@ -100,6 +104,35 @@ export class RedditHelper {
         });
     }
 
+    public static getNewSubmissions(subreddit: string, limit: number = 10): Promise<RedditSubmissionListing> {
+        return new Promise((resolve, reject) => {
+            let options: https.RequestOptions = {
+                host: "api.reddit.com",
+                port: 443,
+                path: "/r/" + subreddit + "/new?limit=" + limit,
+                headers: {
+                    "User-Agent": "github.com/DonMahallem/got-api"
+                }
+            };
+            let request = https.get(options, (res) => {
+                if (res.statusCode != 200) {
+                    reject(new Error("Status Code (" + res.statusCode + ") was returned"));
+                    return;
+                }
+                let body = '';
+                res.on('data', function (chunk) {
+                    body += chunk;
+                });
+                res.on('end', function () {
+                    const parsed = JSON.parse(body);
+                    resolve(parsed);
+                });
+            });
+            request.on('error', function (e) {
+                reject(e);
+            });
+        });
+    }
 
 
     public static createAuthorizeUrl(scopes: Scopes, state: string, duration: Duration = Duration.PERMANENT): string {

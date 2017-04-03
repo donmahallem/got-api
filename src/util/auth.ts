@@ -1,5 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import { Config } from "./../config";
+import * as crypto from "crypto";
 
 export enum Audience {
     USER = 1,
@@ -14,13 +15,34 @@ export type JwtBody = {
 }
 
 export class Auth {
-    public static sign(data: string | JwtBody): Promise<string> {
+
+    public static randomBytes(length: number): Promise<Buffer> {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(length, (err: Error, buf: Buffer) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(buf);
+                }
+            });
+        })
+    }
+
+    public static signAccessToken(data: string | JwtBody | any, expires: number | string = "1h"): Promise<string> {
+        return Auth.sign(data, "acccess_token", expires);
+    }
+
+    public static signRefreshToken(data: string | JwtBody | any, expires: number | string = "7d"): Promise<string> {
+        return Auth.sign(data, "refresh_token", expires);
+    }
+
+    public static sign(data: string | JwtBody | any, subject: string, expires: number | string = "1h"): Promise<string> {
         return new Promise((resolve, reject) => {
             let options: jwt.SignOptions = {
                 algorithm: "HS512",
                 audience: ["user"],
-                expiresIn: "1h",
-                subject: "access",
+                expiresIn: expires,
+                subject: subject,
                 issuer: Config.jwtIssuer
             };
             jwt.sign(data, Config.jwtSecret, options, (err, token) => {

@@ -11,6 +11,9 @@ export class Config {
                 "reddit": {
                     "clientId": null,
                     "clientSecret": null
+                },
+                "cookies": {
+                    "secure": true
                 }
             });
         }
@@ -46,6 +49,12 @@ export class Config {
         return Config.nconf.get("reddit:redirectUri");
     }
     public static set redditRedirectUri(redditRedirectUri: string) {
+
+    }
+    public static get cookiesSecure(): boolean {
+        return Config.nconf.get("cookies:secure");
+    }
+    public static set cookiesSecure(redditRedirectUri: boolean) {
 
     }
 
