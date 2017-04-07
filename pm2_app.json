@@ -1,15 +1,16 @@
 {
     "apps": [
         {
-            "name": "reddit-crawler",
-            "script": "./build/crawler.js",
-            "watch": true
-        },
-        {
-            "name": "got-server_80",
+            "name": "got-server_8101",
             "script": "./build/index.js",
             "watch": true,
-            "args": "-p 80"
+            "args": "-p 8101"
+        },
+        {
+            "name": "got-server_8102",
+            "script": "./build/index.js",
+            "watch": true,
+            "args": "-p 8102"
         }
     ]
 }
