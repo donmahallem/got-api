@@ -135,7 +135,8 @@ export class RedisApi {
             emitter.push(JSON.parse(message));
         });
         sub.on("error", err => {
-
+            console.error(err);
+            emitter.end();
         });
         sub.on("end", () => {
             emitter.end();
