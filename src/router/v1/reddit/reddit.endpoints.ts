@@ -61,10 +61,13 @@ export class RedditEndpoints {
     }
 
     public static getLive: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        res.writeHead(200, "Ok", {
-            "Content-Type": "text/event-stream"
+        req.socket.setTimeout(Infinity);
+        res.writeHead(200, {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive'
         });
-        res.write("event: ping\ndata: pong\n\n");
+        res.write('\n');
         let aborted: boolean = false;
         let sub = RedisApi.redditFeed();
         const finish: Function = (error?: Error) => {
