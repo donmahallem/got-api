@@ -25,7 +25,7 @@
         "@types/mocha": "^2.2.40",
         "@types/nconf": "0.0.34",
         "@types/node": "^7.0.5",
-        "@types/node_redis": "^0.8.28",
+        "@types/redis": "^0.12.36",
         "@types/serve-static": "^1.7.31",
         "@types/sinon": "^1.16.35",
         "@types/supertest": "^2.0.0",

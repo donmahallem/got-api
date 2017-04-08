@@ -41,15 +41,23 @@ export class AuthEndpoints {
                             id: data.id,
                             name: data.name
                         }
-                        return Promise.all([Auth.createAccessToken(user), Auth.createRefreshToken(user)]);
+                        return Promise.all([Auth.createAccessToken(user), Auth.createRefreshToken(user)])
+                            .then(results => {
+                                return {
+                                    id: data.id,
+                                    name: data.name,
+                                    access_token: results[0],
+                                    refresh_token: results[1]
+                                }
+                            });
                     })
-                    .then(tokens => {
-                        res.json({
-                            "data": {
-                                "access_token": tokens[0],
-                                "refresh_token": tokens[1]
-                            }
-                        });
+                    .then(data => {
+                        return RedisApi.storeGotToken(data.id, data.access_token, data.refresh_token)
+                            .then(success => {
+                                res.json({
+                                    "data": data
+                                });
+                            });
                     }).catch(err => {
                         next(err);
                     });

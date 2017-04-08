@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 import { Config } from "./../config";
 import * as crypto from "crypto";
 import * as redis from "redis";
+import { RedisApi } from "./redis.api";
 
 export enum Audience {
     USER = 1,
@@ -48,6 +49,12 @@ export class Auth {
                     user: user,
                     token: key.toString("hex")
                 });
+            })
+            .then(token => {
+                return RedisApi.storeGotToken(user.id, token)
+                    .then(result => {
+                        return token;
+                    })
             });
     }
 
