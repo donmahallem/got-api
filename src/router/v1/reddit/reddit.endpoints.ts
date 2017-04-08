@@ -68,12 +68,14 @@ export class RedditEndpoints {
         let aborted: boolean = false;
         let sub = RedisApi.redditFeed();
         const finish: Function = (error?: Error) => {
+            console.log("end", "recieved");
             sub.quit();
             res.end()
         };
         req.on("close", finish);
         req.on("error", finish);
         sub.on("message", submission => {
+            console.log("Sub recieved", JSON.stringify(submission))
             res.write("event: submission\n");
             res.write("id: " + parseInt(submission.id, 36) + "\n");
             res.write("data: ");
