@@ -62,12 +62,12 @@ export class RedditEndpoints {
 
     public static getLive: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         //req.socket.setTimeout(Infinity);
+        req.connection.setTimeout(1000000);
         res.writeHead(200, {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive'
         });
-        req.connection.setTimeout(Infinity);
         res.write('\n');
         let aborted: boolean = false;
         let sub = RedisApi.redditFeed();
