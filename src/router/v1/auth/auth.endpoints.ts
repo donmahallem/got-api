@@ -32,6 +32,7 @@ export class AuthEndpoints {
                     .then(data => {
                         return RedisApi.storeRedditToken(data.id, data.access_token, data.refresh_token)
                             .then(success => {
+                                console.log(success);
                                 return data;
                             });
                     })

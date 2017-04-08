@@ -33,7 +33,7 @@ export class RedisApi {
                             if (err) {
                                 reject(err);
                             } else {
-                                resolve(cb);
+                                resolve(true);
                             }
                         });
                 })
