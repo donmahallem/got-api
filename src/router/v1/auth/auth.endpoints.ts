@@ -12,10 +12,10 @@ export class AuthEndpoints {
 
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.body.hasOwnProperty("type")) {
-            if (req.body.action === "refresh_token" && req.body.hasOwnProperty("refresh_token")) {
+            if (req.body.type === "refresh_token" && req.body.hasOwnProperty("refresh_token")) {
                 res.send("refresh");
                 res.end();
-            } else if (req.body.action === "code" && req.body.hasOwnProperty("code")) {
+            } else if (req.body.type === "code" && req.body.hasOwnProperty("code")) {
                 res.send(req.body.code);
                 res.end();
             } else {
