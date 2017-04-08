@@ -22,20 +22,22 @@ export class AuthEndpoints {
                             .then(me => {
                                 return {
                                     name: me.name,
+                                    id: me.id,
                                     access_token: resp.access_token,
                                     refresh_token: resp.refresh_token
                                 }
                             });
                     })
                     .then(data => {
-                        return Auth.storeRedditToken(data.name, data.access_token, data.refresh_token)
+                        return Auth.storeRedditToken(data.id, data.access_token, data.refresh_token)
                             .then(success => {
                                 return data;
                             });
                     })
                     .then(data => {
-
-                        let accessTokenBody = {};
+                        let accessTokenBody = {
+                            name: data.name
+                        };
                         let refreshTokenBody = {};
                         return Promise.all([Auth.signAccessToken(accessTokenBody), Auth.signRefreshToken(refreshTokenBody)]);
                     })
