@@ -19,10 +19,10 @@ export class AuthEndpoints {
                 res.send(req.query);
                 res.end();
             } else {
-                next(new Error());
+                next(new Error("no stuff provided"));
             }
         } else {
-            next(new Error());
+            next(new Error("no type provided"));
         }
     }
 }
