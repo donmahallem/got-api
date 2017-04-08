@@ -1,6 +1,5 @@
 import * as express from "express";
 import { RedditEndpoints } from "./reddit.endpoints";
-import * as liveRouter from "./live/live.router";
 
 
 let router: express.Router = express.Router();
