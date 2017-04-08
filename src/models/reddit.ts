@@ -22,7 +22,6 @@ export interface RedditSelftext extends RedditThing {
 }
 
 export interface RedditSubmission extends RedditThing {
-
 }
 
 export enum RedditThingType {

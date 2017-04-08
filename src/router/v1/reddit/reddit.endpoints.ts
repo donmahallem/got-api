@@ -73,12 +73,11 @@ export class RedditEndpoints {
         };
         req.on("close", finish);
         req.on("error", finish);
-        sub.on("message", function (channel, message) {
-            let submission: { id: string } = JSON.parse(message);
+        sub.on("message", function (channel, submission) {
             res.write("event: submission\n");
             res.write("id: " + parseInt(submission.id, 36) + "\n");
             res.write("data: ");
-            res.write(message);
+            res.write(JSON.stringify(submission));
             res.write("\n\n");
         });
         sub.on("error", err => {
