@@ -1,4 +1,4 @@
-import { redis } from "redis";
+import * as redis from "redis";
 
 export class RedisApi {
     private static readonly REDDIT_TOKEN_ACCESS = "reddit:token:access:";

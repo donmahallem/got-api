@@ -16,6 +16,8 @@ export type JwtBody = {
 }
 
 export class Auth {
+    private static readonly gotAccessTokenPrefix: string = "got:token:access:";
+    private static readonly gotRefreshTokenPrefix: string = "got:token:refresh:";
 
     public static randomBytes(length: number): Promise<Buffer> {
         return new Promise((resolve, reject) => {
@@ -47,25 +49,6 @@ export class Auth {
                     token: key.toString("hex")
                 });
             });
-    }
-
-    public static storeRedditToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            let redisClient = redis.createClient();
-            let accessTokenKey = "reddit:token:access:" + user;
-            let refreshTokenKey = "reddit:token:refresh:" + user;
-            redisClient.multi()
-                .set(accessTokenKey, acccess_token, 'EX', 3600)
-                .set(refreshTokenKey, refresh_token, 'EX', 3600 * 24)
-                .exec((err, cb) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(cb);
-                    }
-                    redisClient.quit();
-                });
-        });
     }
 
     public static signAccessToken(data: string | JwtBody | any, expires: number | string = "1h"): Promise<string> {
