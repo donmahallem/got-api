@@ -71,6 +71,7 @@ export class RedditEndpoints {
         });
         RedisApi.redditFeedStream()
             .pipe(through2.obj(function (submission, enc, callback) {
+                console.log("push sub", submission.id);
                 this.push("event: submission\n");
                 this.push("id: " + parseInt(submission.id, 36) + "\n");
                 this.push("data: ");
