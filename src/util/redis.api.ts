@@ -12,7 +12,7 @@ export class RedisApi {
                     reject(err);
                 };
                 this._redis.on("ready", () => {
-                    this._redis.removeListener(errorCallback);
+                    this._redis.removeListener("error", errorCallback);
                     resolve(this._redis);
                 }).on("error", errorCallback);
             }
