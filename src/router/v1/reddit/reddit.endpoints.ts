@@ -8,6 +8,7 @@ import {
 import {
     Config
 } from "./../../../config";
+import * as through2 from "through2";
 
 export class RedditEndpoints {
     static readonly signin: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -68,30 +69,16 @@ export class RedditEndpoints {
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive'
         });
-        res.write('\n');
-        let aborted: boolean = false;
-        let sub = RedisApi.redditFeed();
-        const finish: Function = (error?: Error) => {
-            console.log("end", "recieved");
-            sub.quit();
-            res.end()
-        };
-        req.on("close", finish);
-        req.on("error", finish);
-        sub.on("message", submission => {
-            console.log("Sub recieved", JSON.stringify(submission))
-            res.write("event: submission\n");
-            res.write("id: " + parseInt(submission.id, 36) + "\n");
-            res.write("data: ");
-            res.write(JSON.stringify(submission));
-            res.write("\n\n");
-        });
-        sub.on("error", err => {
-            res.end();
-        });
-        sub.on("end", () => {
-            res.end();
-        });
+        RedisApi.redditFeedStream()
+            .pipe(through2.obj(function (submission, enc, callback) {
+                this.push("event: submission\n");
+                this.push("id: " + parseInt(submission.id, 36) + "\n");
+                this.push("data: ");
+                this.push(JSON.stringify(submission));
+                this.push("\n\n");
+                callback()
+            }))
+            .pipe(res);
     };
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.query.hasOwnProperty("action")) {

@@ -1,6 +1,13 @@
 import * as redis from "redis";
 import * as EventEmitter from "events";
-
+import * as through2 from "through2";
+import {
+    Readable,
+    Writable,
+    Duplex,
+    Transform,
+    PassThrough
+} from "stream";
 enum TokenType {
     ACCESS = 1,
     REFRESH = 2
@@ -22,6 +29,9 @@ export class RedditFeedEmitter extends EventEmitter {
     public quit() {
         this.sub.quit();
     }
+}
+
+export class RedditFeedStream extends Transform {
 }
 
 export class RedisApi {
@@ -108,6 +118,27 @@ export class RedisApi {
         });
         sub.on("end", () => {
             emitter.emit("end");
+        });
+        sub.subscribe("reddit:submission");
+        return emitter;
+    }
+
+
+    public static redditFeedStream(): PassThrough {
+        let sub = redis.createClient();
+        let emitter: PassThrough = new PassThrough({
+            readableObjectMode: true,
+            writableObjectMode: true,
+            objectMode: true
+        });
+        sub.on("message", function (channel, message) {
+            emitter.push(JSON.parse(message));
+        });
+        sub.on("error", err => {
+
+        });
+        sub.on("end", () => {
+            emitter.end();
         });
         sub.subscribe("reddit:submission");
         return emitter;
