@@ -69,17 +69,22 @@ export class RedditEndpoints {
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive'
         });
-        RedisApi.redditFeedStream()
-            .pipe(through2.obj(function (submission, enc, callback) {
-                console.log("push sub", submission.id);
-                this.push("event: submission\n");
-                this.push("id: " + parseInt(submission.id, 36) + "\n");
-                this.push("data: ");
-                this.push(JSON.stringify(submission));
-                this.push("\n\n");
-                callback()
-            }))
-            .pipe(res);
+        let emitter = RedisApi.redditFeed();
+        emitter.on("message", submission => {
+            console.log("push sub", submission.id);
+            res.write("event: submission\n");
+            res.write("id: " + parseInt(submission.id, 36) + "\n");
+            res.write("data: ");
+            res.write(JSON.stringify(submission));
+            res.write("\n\n");
+        });
+        emitter.once("error", error => {
+            res.write("event: error\nmessage: error message\n\n")
+            res.end();
+        });
+        emitter.once("end", () => {
+            res.end();
+        });
     };
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.query.hasOwnProperty("action")) {
