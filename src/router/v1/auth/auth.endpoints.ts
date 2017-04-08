@@ -14,8 +14,21 @@ export class AuthEndpoints {
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.body.hasOwnProperty("type")) {
             if (req.body.type === "refresh_token" && req.body.hasOwnProperty("refresh_token")) {
-                let response = {};
-                res.json(response);
+                Auth.verify(req.body["refresh_token"])
+                    .then(decoded => {
+                        return Promise.all([Auth.createAccessToken(decoded.user.id), Auth.createRefreshToken(decoded.user.id)])
+                    })
+                    .then(tokens => {
+                        res.json({
+                            data: {
+                                access_token: tokens[0],
+                                refresh_token: tokens[1]
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        next(err);
+                    });
             } else if (req.body.type === "code" && req.body.hasOwnProperty("code")) {
                 RedditHelper.exchangeCode(req.body.code)
                     .then((resp) => {

@@ -11,7 +11,7 @@ export class GotMiddleware {
                         next();
                     })
                     .catch(err => {
-                        next(err);
+                        res.sendStatus(401);
                     });
                 return;
             }
