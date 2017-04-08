@@ -29,6 +29,26 @@ export class Auth {
         })
     }
 
+    public static createAccessToken(user: { id: string, name: string }): Promise<string> {
+        return this.randomBytes(64)
+            .then(key => {
+                return this.signAccessToken({
+                    user: user,
+                    token: key.toString("hex")
+                });
+            });
+    }
+
+    public static createRefreshToken(user: { id: string, name: string }): Promise<string> {
+        return this.randomBytes(64)
+            .then(key => {
+                return this.signRefreshToken({
+                    user: user,
+                    token: key.toString("hex")
+                });
+            });
+    }
+
     public static storeRedditToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             let redisClient = redis.createClient();

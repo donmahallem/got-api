@@ -2,7 +2,8 @@ import * as express from "express";
 import {
     RedditHelper,
     Scope,
-    Auth
+    Auth,
+    RedisApi
 } from "./../../../util/";
 import {
     Config
@@ -29,17 +30,17 @@ export class AuthEndpoints {
                             });
                     })
                     .then(data => {
-                        return Auth.storeRedditToken(data.id, data.access_token, data.refresh_token)
+                        return RedisApi.storeRedditToken(data.id, data.access_token, data.refresh_token)
                             .then(success => {
                                 return data;
                             });
                     })
                     .then(data => {
-                        let accessTokenBody = {
+                        let user = {
+                            id: data.id,
                             name: data.name
-                        };
-                        let refreshTokenBody = {};
-                        return Promise.all([Auth.signAccessToken(accessTokenBody), Auth.signRefreshToken(refreshTokenBody)]);
+                        }
+                        return Promise.all([Auth.createAccessToken(user), Auth.createRefreshToken(user)]);
                     })
                     .then(tokens => {
                         res.json({

@@ -7,3 +7,7 @@ export {
 export {
     Auth
 } from "./auth";
+
+export {
+    RedisApi
+} from "./redis.api";
