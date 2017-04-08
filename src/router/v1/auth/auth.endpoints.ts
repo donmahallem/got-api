@@ -52,12 +52,9 @@ export class AuthEndpoints {
                             });
                     })
                     .then(data => {
-                        return RedisApi.storeGotToken(data.id, data.access_token, data.refresh_token)
-                            .then(success => {
-                                res.json({
-                                    "data": data
-                                });
-                            });
+                        res.json({
+                            "data": data
+                        });
                     }).catch(err => {
                         next(err);
                     });

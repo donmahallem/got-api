@@ -44,21 +44,21 @@ export class Auth {
 
     public static createRefreshToken(user: { id: string, name: string }): Promise<string> {
         return this.randomBytes(64)
+            .then(buf => {
+                let hexed = buf.toString("hex");
+                return RedisApi.storeRefreshToken(user.id, hexed).then(succes => {
+                    return hexed;
+                });
+            })
             .then(key => {
                 return this.signRefreshToken({
                     user: user,
-                    token: key.toString("hex")
+                    token: key
                 });
-            })
-            .then(token => {
-                return RedisApi.storeGotToken(user.id, token)
-                    .then(result => {
-                        return token;
-                    })
             });
     }
 
-    public static signAccessToken(data: string | JwtBody | any, expires: number | string = "1h"): Promise<string> {
+    public static signAccessToken(data: string | JwtBody | any, expires: number | string = "5m"): Promise<string> {
         return Auth.sign(data, "acccess_token", expires);
     }
 

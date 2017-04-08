@@ -33,8 +33,8 @@ export class RedisApi {
         return "token:" + user + ":reddit:" + (type == TokenType.ACCESS) ? "accesss" : "refresh";
     }
 
-    private static createGotTokenKey(user: string, token: string, type: TokenType): string {
-        return "token:" + user + ":got:" + (type == TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
+    private static createGotTokenKey(token: string, type: TokenType): string {
+        return "token:got:" + (type == TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
     }
 
     private static setMulti(data: SetData[]): Promise<boolean> {
@@ -58,6 +58,34 @@ export class RedisApi {
                     })
                 });
             });
+    }
+
+    private static set(key: string, value: string, duration: number = -1): Promise<string> {
+        return this.redis().then(redisClient => {
+            return new Promise<string>((resolve, reject) => {
+                if (duration > 0) {
+                    redisClient.set(key, value, "EX", duration, (err, cb) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(cb);
+                        }
+                    });
+                } else {
+                    redisClient.set(key, value, (err, cb) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(cb);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    public static storeRefreshToken(id: string, refresh_token: string): Promise<redis.ClientOpts> {
+        return this.set(RedisApi.createGotTokenKey(refresh_token, TokenType.REFRESH), id, 3600 * 24);
     }
 
     public static storeGotToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
