@@ -1,4 +1,4 @@
 git fetch
 git pull
-npm run install
+npm install
 npm run build
