@@ -35,16 +35,15 @@ export class Auth {
             let accessTokenKey = "reddit:token:access:" + user;
             let refreshTokenKey = "reddit:token:refresh:" + user;
             redisClient.multi()
-                .set(accessTokenKey, acccess_token)
-                .set(refreshTokenKey, refresh_token)
-                .expiresIn(accessTokenKey, 3600)
-                .expiresIn(refreshTokenKey, 3600 * 24)
+                .set(accessTokenKey, acccess_token, 'EX', 3600)
+                .set(refreshTokenKey, refresh_token, 'EX', 3600 * 24)
                 .exec((err, cb) => {
                     if (err) {
                         reject(err);
                     } else {
                         resolve(cb);
                     }
+                    redisClient.quit();
                 });
         });
     }
