@@ -2,7 +2,8 @@ import * as express from "express";
 import {
     RedditHelper,
     Scope,
-    Auth
+    Auth,
+    RedisApi
 } from "./../../../util/";
 import {
     Config
@@ -59,6 +60,34 @@ export class RedditEndpoints {
         }
     }
 
+    public static getLive: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.writeHead(200, "Ok", {
+            "Content-Type": "text/event-stream"
+        });
+        res.write("event: ping\ndata: pong\n\n");
+        let aborted: boolean = false;
+        let sub = RedisApi.redditFeed();
+        const finish: Function = (error?: Error) => {
+            sub.quit();
+            res.end()
+        };
+        req.on("close", finish);
+        req.on("error", finish);
+        sub.on("message", function (channel, message) {
+            let submission: { id: string } = JSON.parse(message);
+            res.write("event: submission\n");
+            res.write("id: " + parseInt(submission.id, 36) + "\n");
+            res.write("data: ");
+            res.write(message);
+            res.write("\n\n");
+        });
+        sub.on("error", err => {
+            res.end();
+        });
+        sub.on("end", () => {
+            res.end();
+        });
+    };
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.query.hasOwnProperty("action")) {
             if (req.query.action === "refresh_token") {

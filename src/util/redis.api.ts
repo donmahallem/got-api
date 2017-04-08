@@ -1,4 +1,5 @@
 import * as redis from "redis";
+import * as EventEmitter from "events";
 
 enum TokenType {
     ACCESS = 1,
@@ -9,6 +10,18 @@ export type SetData = {
     key: string;
     value: string;
     ttl?: number;
+}
+
+export class RedditFeedEmitter extends EventEmitter {
+    private sub: redis.RedisClient;
+    constructor(sub: redis.RedisClient) {
+        super();
+        this.sub = sub;
+    }
+
+    public quit() {
+        this.sub.quit();
+    }
 }
 
 export class RedisApi {
@@ -82,6 +95,22 @@ export class RedisApi {
                 }
             });
         });
+    }
+
+    public static redditFeed(): RedditFeedEmitter {
+        let sub = redis.createClient();
+        let emitter: RedditFeedEmitter = new RedditFeedEmitter(sub);
+        sub.on("message", function (channel, message) {
+            emitter.emit("message", JSON.parse(message));
+        });
+        sub.on("error", err => {
+            emitter.emit("error", err);
+        });
+        sub.on("end", () => {
+            emitter.emit("end");
+        });
+        sub.subscribe("reddit:submission");
+        return emitter;
     }
 
     public static storeRefreshToken(id: string, refresh_token: string): Promise<redis.ClientOpts> {
