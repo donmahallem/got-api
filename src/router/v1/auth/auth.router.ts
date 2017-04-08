@@ -3,5 +3,5 @@ import { AuthEndpoints } from "./auth.endpoints";
 
 
 let router: express.Router = express.Router();
-router.get("/token", AuthEndpoints.token);
+router.post("/token", AuthEndpoints.token);
 export = router;
