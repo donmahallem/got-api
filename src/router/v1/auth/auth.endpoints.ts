@@ -13,11 +13,24 @@ export class AuthEndpoints {
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.body.hasOwnProperty("type")) {
             if (req.body.type === "refresh_token" && req.body.hasOwnProperty("refresh_token")) {
-                res.send("refresh");
-                res.end();
+                let response = {};
+                res.json(response);
             } else if (req.body.type === "code" && req.body.hasOwnProperty("code")) {
-                res.send(req.body.code);
-                res.end();
+                RedditHelper.exchangeCode(req.body.code)
+                    .then((resp) => {
+                        console.log("Code exchanged", resp);
+                        let accessTokenBody = {};
+                        let refreshTokenBody = {};
+                        return Promise.all([Auth.signAccessToken(accessTokenBody), Auth.signRefreshToken(refreshTokenBody)]);
+                    })
+                    .then(tokens => {
+                        res.json({
+                            "access_token": tokens[0],
+                            "refresh_token": tokens[1]
+                        })
+                    }).catch(err => {
+                        next(err);
+                    });
             } else {
                 next(new Error("no stuff provided"));
             }
