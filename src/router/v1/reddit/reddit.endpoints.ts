@@ -67,7 +67,9 @@ export class RedditEndpoints {
         res.writeHead(200, {
             'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive'
+            'Connection': 'keep-alive',
+            'Transfer-Encoding': 'chunked',
+            'X-Content-Type-Options': 'nosniff'
         });
         let emitter = RedisApi.redditFeed();
         emitter.on("message", submission => {
