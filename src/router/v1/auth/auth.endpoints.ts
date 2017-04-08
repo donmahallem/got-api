@@ -25,9 +25,11 @@ export class AuthEndpoints {
                     })
                     .then(tokens => {
                         res.json({
-                            "access_token": tokens[0],
-                            "refresh_token": tokens[1]
-                        })
+                            "data": {
+                                "access_token": tokens[0],
+                                "refresh_token": tokens[1]
+                            }
+                        });
                     }).catch(err => {
                         next(err);
                     });
