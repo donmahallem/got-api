@@ -18,7 +18,23 @@ export class AuthEndpoints {
             } else if (req.body.type === "code" && req.body.hasOwnProperty("code")) {
                 RedditHelper.exchangeCode(req.body.code)
                     .then((resp) => {
-                        console.log("Code exchanged", resp);
+                        return RedditHelper.getMe(resp.access_token)
+                            .then(me => {
+                                return {
+                                    name: me.name,
+                                    access_token: resp.access_token,
+                                    refresh_token: resp.refresh_token
+                                }
+                            });
+                    })
+                    .then(data => {
+                        return Auth.storeRedditToken(data.name, data.access_token, data.refresh_token)
+                            .then(success => {
+                                return data;
+                            });
+                    })
+                    .then(data => {
+
                         let accessTokenBody = {};
                         let refreshTokenBody = {};
                         return Promise.all([Auth.signAccessToken(accessTokenBody), Auth.signRefreshToken(refreshTokenBody)]);

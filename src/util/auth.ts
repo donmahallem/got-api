@@ -1,6 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import { Config } from "./../config";
 import * as crypto from "crypto";
+import * as redis from "redis";
 
 export enum Audience {
     USER = 1,
@@ -26,6 +27,26 @@ export class Auth {
                 }
             });
         })
+    }
+
+    public static storeRedditToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            let redisClient = redis.createClient();
+            let accessTokenKey = "reddit:token:access:" + user;
+            let refreshTokenKey = "reddit:token:refresh:" + user;
+            redisClient.multi()
+                .set(accessTokenKey, acccess_token)
+                .set(refreshTokenKey, refresh_token)
+                .expiresIn(accessTokenKey, 3600)
+                .expiresIn(refreshTokenKey, 3600 * 24)
+                .exec((err, cb) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(cb);
+                    }
+                });
+        });
     }
 
     public static signAccessToken(data: string | JwtBody | any, expires: number | string = "1h"): Promise<string> {
