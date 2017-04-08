@@ -8,13 +8,13 @@ export class RedisApi {
         return new Promise<redis.Client>((resolve, reject) => {
             if (this._redis == null) {
                 this._redis = redis.createClient();
-                let errorL = this._redis.on("error", err => {
-                    reject(new Error("Couldnt connect to redis"));
-                });
+                let errorCallback = (err) => {
+                    reject(err);
+                };
                 this._redis.on("ready", () => {
-                    this._redis.removeListener(errorL);
+                    this._redis.removeListener(errorCallback);
                     resolve(this._redis);
-                })
+                }).on("error", errorCallback);
             }
             resolve(this._redis);
         });
