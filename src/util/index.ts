@@ -11,3 +11,7 @@ export {
 export {
     RedisApi
 } from "./redis.api";
+
+export {
+    GotMiddleware
+} from "./got-middleware";

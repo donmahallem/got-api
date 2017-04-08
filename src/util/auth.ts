@@ -3,7 +3,13 @@ import { Config } from "./../config";
 import * as crypto from "crypto";
 import * as redis from "redis";
 import { RedisApi } from "./redis.api";
+import * as passportjs from "passport";
+import * as passportjsBearer from "passport-http-bearer";
 
+
+passportjs.use(new passportjsBearer.Strategy((token, done) => {
+
+}));
 export enum Audience {
     USER = 1,
     ADMIN = 2
@@ -58,6 +64,8 @@ export class Auth {
             });
     }
 
+
+
     public static signAccessToken(data: string | JwtBody | any, expires: number | string = "5m"): Promise<string> {
         return Auth.sign(data, "acccess_token", expires);
     }
@@ -85,7 +93,7 @@ export class Auth {
         });
     }
 
-    public static verify(token: string): Promise<JwtBody | string> {
+    public static verify(token: string): Promise<JwtBody | string | any> {
         return new Promise((resolve, reject) => {
             let options: jwt.VerifyOptions = {
                 algorithms: ["HS512"],
