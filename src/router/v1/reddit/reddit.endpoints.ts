@@ -73,7 +73,7 @@ export class RedditEndpoints {
         };
         req.on("close", finish);
         req.on("error", finish);
-        sub.on("message", function (channel, submission) {
+        sub.on("message", submission => {
             res.write("event: submission\n");
             res.write("id: " + parseInt(submission.id, 36) + "\n");
             res.write("data: ");
