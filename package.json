@@ -7,7 +7,7 @@
         "test": "mocha --opts ./test/.mocha.opts src/**/*.spec.ts",
         "build": "tsc --sourceMap --outDir ./build/",
         "build:watch": "tsc --sourceMap --watch --outDir ./build/",
-        "test-ci": "istanbul cover --config test/.istanbul.yml node_modules/mocha/bin/_mocha -- --opts ./test/.mocha.opts build/**/*.spec.js",
+        "test-ci": "nyc npm run test",
         "start": "npm run build:live",
         "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts --port 80",
         "build-crawler:live": "nodemon --watch src/**/*.ts --exec ts-node src/crawler.ts",
@@ -63,6 +63,7 @@
         "karma-sinon": "^1.0.5",
         "mocha": "^3.2.0",
         "nodemon": "^1.11.0",
+        "nyc": "^10.2.0",
         "remap-istanbul": "^0.9.1",
         "sinon": "^2.0.0",
         "sinon-chai": "^2.8.0",
@@ -70,5 +71,25 @@
         "ts-node": "^2.1.0",
         "typedoc": "^0.5.7",
         "typescript": "^2.2.1"
+    },
+    "nyc": {
+        "include": [
+            "src/*.ts",
+            "src/**/*.ts"
+        ],
+        "exclude": [
+            "typings"
+        ],
+        "extension": [
+            ".ts"
+        ],
+        "require": [
+            "ts-node/register"
+        ],
+        "reporter": [
+            "json",
+            "html"
+        ],
+        "all": true
     }
 }
