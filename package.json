@@ -41,7 +41,7 @@
         "jsonwebtoken": "^7.2.1",
         "moment": "^2.17.1",
         "nconf": "^0.8.4",
-        "passport": "^0.3.2",
+        "passport": "^0.4.0",
         "passport-http-bearer": "^1.0.1",
         "pug": "^2.0.0-beta11",
         "redis": "^2.7.1",
