@@ -54,7 +54,7 @@
         "grunt": "^1.0.1",
         "grunt-apidoc": "^0.11.0",
         "grunt-contrib-pug": "^1.0.0",
-        "grunt-contrib-uglify": "^2.0.0",
+        "grunt-contrib-uglify": "^4.0.0",
         "grunt-jsbeautifier": "^0.2.13",
         "istanbul": "^0.4.5",
         "karma": "^1.5.0",
