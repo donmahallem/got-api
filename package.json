@@ -23,7 +23,7 @@
         "@types/express": "^4.0.35",
         "@types/jsonwebtoken": "^8.3.0",
         "@types/mocha": "^2.2.40",
-        "@types/nconf": "0.0.37",
+        "@types/nconf": "0.10.0",
         "@types/node": "^11.9.3",
         "@types/passport": "^0.3.3",
         "@types/passport-http-bearer": "^1.0.30",
