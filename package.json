@@ -65,7 +65,7 @@
         "nodemon": "^1.11.0",
         "nyc": "^10.2.0",
         "remap-istanbul": "^0.13.0",
-        "sinon": "^2.0.0",
+        "sinon": "^7.2.3",
         "sinon-chai": "^3.2.0",
         "supertest": "^3.0.0",
         "ts-node": "^2.1.0",
