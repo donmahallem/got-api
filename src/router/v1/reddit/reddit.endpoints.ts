@@ -4,14 +4,14 @@
 
 import * as express from "express";
 import {
-    RedditHelper,
-    Scope,
-    Auth,
-    RedisApi,
-} from "./../../../util/";
-import {
     Config,
 } from "./../../../config";
+import {
+    Auth,
+    RedditHelper,
+    RedisApi,
+    Scope,
+} from "./../../../util/";
 
 export class RedditEndpoints {
     static readonly signin: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -22,25 +22,22 @@ export class RedditEndpoints {
             next(new Error("No code argument provided"));
         } else {
             RedditHelper.exchangeCode(req.query.code)
-                .then((data) => {
-                    return RedditHelper.getMe(data.access_token)
-                })
+                .then((data) =>
+                    RedditHelper.getMe(data.access_token))
                 .then((user) => {
                     const accessTokenPromise: Promise<string> = Auth.signAccessToken({
                         user: {
                             id: user.id,
                             name: user.name,
                         },
-                    }).then(value => {
-                        return value;
-                    });
+                    }).then(value =>
+                        value);
                     const refreshTokenPromise: Promise<string> = Auth.randomBytes(128)
-                        .then((token) => {
-                            return Auth.signRefreshToken({
+                        .then((token) =>
+                            Auth.signRefreshToken({
                                 token: token.toString("hex"),
                                 user: user.id,
-                            });
-                        });
+                            }));
                     return Promise.all([accessTokenPromise, refreshTokenPromise]);
                 })
                 .then((jwts) => {
