@@ -1,99 +1,103 @@
 {
-    "name": "got-server",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "mocha",
-        "build": "tsc --sourceMap --outDir ./build/",
-        "build:watch": "tsc --sourceMap --watch --outDir ./build/",
-        "test:ci": "nyc npm run test",
-        "lint": "tslint -c tslint.json -p tsconfig-lint.json src/**/*.ts",
-        "lint:fix": "tslint --fix -c tslint.json -p tsconfig-lint.json src/**/*.ts",
-        "start": "npm run build:live",
-        "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts --port 80",
-        "build-crawler:live": "nodemon --watch src/**/*.ts --exec ts-node src/crawler.ts",
-        "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/",
-        "coverage:remap": "remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info --exclude node_modules --type lcovonly"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@types/chai": "~4.2.8",
-        "@types/cookie-parser": "~1.3.30",
-        "@types/expect": "~24.3.0",
-        "@types/express": "~4.0.35",
-        "@types/jsonwebtoken": "~8.3.0",
-        "@types/mocha": "~7.0.1",
-        "@types/nconf": "~0.10.0",
-        "@types/node": "~12.0.0",
-        "@types/passport": "~1.0.0",
-        "@types/passport-http-bearer": "~1.0.30",
-        "@types/redis": "~2.8.6",
-        "@types/serve-static": "~1.13.3",
-        "@types/sinon": "~7.0.5",
-        "@types/supertest": "~2.0.0",
-        "@types/through2": "~2.0.32",
-        "argparse": "~1.0.9",
-        "body-parser": "~1.15.2",
-        "cookie": "~0.4.0",
-        "cookie-parser": "~1.4.3",
-        "express": "~4.14.0",
-        "helmet": "~3.4.1",
-        "jsonwebtoken": "~8.3.0",
-        "moment": "~2.19.3",
-        "nconf": "~0.10.0",
-        "passport": "~0.4.0",
-        "passport-http-bearer": "~1.0.1",
-        "pug": "~2.0.0-beta11",
-        "redis": "~2.7.1",
-        "serve-static": "~1.11.1",
-        "through2": "~3.0.0"
-    },
-    "devDependencies": {
-        "chai": "~4.1.2",
-        "chai-http": "~4.2.1",
-        "grunt": "~1.0.1",
-        "grunt-apidoc": "~0.11.0",
-        "grunt-contrib-pug": "~2.0.0",
-        "grunt-contrib-uglify": "~4.0.0",
-        "grunt-jsbeautifier": "~0.2.13",
-        "istanbul": "~0.4.5",
-        "karma": "~4.0.0",
-        "karma-chai": "~0.1.0",
-        "karma-mocha": "~1.3.0",
-        "karma-sinon": "~1.0.5",
-        "mocha": "~7.0.1",
-        "nodemon": "~2.0.2",
-        "nyc": "~15.0.0",
-        "remap-istanbul": "~0.13.0",
-        "sinon": "~8.1.1",
-        "sinon-chai": "~3.4.0",
-        "supertest": "~4.0.2",
-        "ts-node": "~8.6.2",
-        "tslint": "^6.0.0",
-        "typedoc": "~0.16.9",
-        "typescript": "~3.3.3"
-    },
-    "nyc": {
-        "include": [
-            "src/*.ts",
-            "src/**/*.ts"
-        ],
-        "exclude": [
-            "typings"
-        ],
-        "extension": [
-            ".ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "reporter": [
-            "json",
-            "html",
-            "lcov"
-        ],
-        "all": true
-    }
+  "name": "got-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "build": "tsc --sourceMap --outDir ./build/",
+    "build:watch": "tsc --sourceMap --watch --outDir ./build/",
+    "test:ci": "nyc npm run test",
+    "lint": "tslint -c tslint.json -p tsconfig-lint.json src/**/*.ts",
+    "lint:fix": "tslint --fix -c tslint.json -p tsconfig-lint.json src/**/*.ts",
+    "start": "npm run build:live",
+    "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts --port 80",
+    "build-crawler:live": "nodemon --watch src/**/*.ts --exec ts-node src/crawler.ts",
+    "build:doc": "node ./node_modules/typedoc/bin/typedoc --out ./tt2/ --mode modules --exclude /**/index ./src/",
+    "coverage:remap": "remap-istanbul -i ./coverage/coverage.json -o ./coverage/lcov.info --exclude node_modules --type lcovonly",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chai": "~4.2.8",
+    "@types/cookie-parser": "~1.3.30",
+    "@types/expect": "~1.20.0",
+    "@types/express": "~4.0.35",
+    "@types/jsonwebtoken": "~8.3.0",
+    "@types/mocha": "~7.0.1",
+    "@types/nconf": "~0.10.0",
+    "@types/node": "~12.0.0",
+    "@types/passport": "~1.0.0",
+    "@types/passport-http-bearer": "~1.0.30",
+    "@types/redis": "~2.8.6",
+    "@types/serve-static": "~1.13.3",
+    "@types/sinon": "~7.0.5",
+    "@types/supertest": "~2.0.0",
+    "@types/through2": "~2.0.32",
+    "argparse": "~1.0.9",
+    "body-parser": "~1.15.2",
+    "cookie": "~0.4.0",
+    "cookie-parser": "~1.4.3",
+    "express": "~4.14.0",
+    "helmet": "~3.4.1",
+    "jsonwebtoken": "~8.3.0",
+    "moment": "~2.19.3",
+    "nconf": "~0.10.0",
+    "passport": "~0.4.0",
+    "passport-http-bearer": "~1.0.1",
+    "pug": "~2.0.0-beta11",
+    "redis": "~2.7.1",
+    "serve-static": "~1.11.1",
+    "through2": "~3.0.0",
+    "snyk": "^1.290.1"
+  },
+  "devDependencies": {
+    "chai": "~4.1.2",
+    "chai-http": "~4.2.1",
+    "grunt": "~1.0.1",
+    "grunt-apidoc": "~0.11.0",
+    "grunt-contrib-pug": "~2.0.0",
+    "grunt-contrib-uglify": "~4.0.0",
+    "grunt-jsbeautifier": "~0.2.13",
+    "istanbul": "~0.4.5",
+    "karma": "~4.0.0",
+    "karma-chai": "~0.1.0",
+    "karma-mocha": "~1.3.0",
+    "karma-sinon": "~1.0.5",
+    "mocha": "~7.0.1",
+    "nodemon": "~2.0.2",
+    "nyc": "~15.0.0",
+    "remap-istanbul": "~0.13.0",
+    "sinon": "~7.2.3",
+    "sinon-chai": "~3.4.0",
+    "supertest": "~4.0.2",
+    "ts-node": "~8.6.2",
+    "tslint": "^6.0.0",
+    "typedoc": "~0.16.9",
+    "typescript": "~3.3.3"
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "json",
+      "html",
+      "lcov"
+    ],
+    "all": true
+  },
+  "snyk": true
 }

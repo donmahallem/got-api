@@ -1,0 +1,47 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > braces > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > extglob > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > nanomatch > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > braces > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > extglob > expand-brackets > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > extglob > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > nanomatch > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug':
+        patched: '2020-02-05T20:41:36.291Z'
+  'npm:ms:20170412':
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > braces > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > extglob > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > nanomatch > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > braces > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > micromatch > extglob > expand-brackets > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > extglob > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > nanomatch > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
+    - '@types/expect > expect > jest-message-util > @jest/test-result > @jest/transform > jest-haste-map > sane > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug > ms':
+        patched: '2020-02-05T20:41:36.291Z'
