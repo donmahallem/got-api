@@ -1,6 +1,9 @@
-import { GotServer } from "./server";
-import { Config } from "./config";
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
 
-//let ArgumentParser = argparse.ArgumentParser;
-let server: GotServer = new GotServer();
+import { GotServer } from "./server";
+
+// let ArgumentParser = argparse.ArgumentParser;
+const server: GotServer = new GotServer();
 server.start();

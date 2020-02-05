@@ -1,20 +1,15 @@
 import * as express from "express";
 import {
     RedditHelper,
-    Scope,
     Auth,
     RedisApi
 } from "./../../../util/";
-import {
-    Config
-} from "./../../../config";
-
 export class AuthEndpoints {
 
     static readonly token: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
         if (req.body.hasOwnProperty("type")) {
             if (req.body.type === "refresh_token" && req.body.hasOwnProperty("refresh_token")) {
-                Auth.verify(req.body["refresh_token"])
+                Auth.verify(req.body.refresh_token)
                     .then(decoded => {
                         return Promise.all([Auth.createAccessToken(decoded.user.id), Auth.createRefreshToken(decoded.user.id)])
                     })
@@ -50,7 +45,7 @@ export class AuthEndpoints {
                             });
                     })
                     .then(data => {
-                        let user = {
+                        const user = {
                             id: data.id,
                             name: data.name
                         }

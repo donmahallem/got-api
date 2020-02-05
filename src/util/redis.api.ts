@@ -145,8 +145,8 @@ export class RedisApi {
         return emitter;
     }
 
-    public static storeRefreshToken(id: string, refresh_token: string): Promise<redis.ClientOpts> {
-        return this.set(RedisApi.createGotTokenKey(refresh_token, TokenType.REFRESH), id, 3600 * 24);
+    public static storeRefreshToken(id: string, refresh_token: string): Promise<string> {
+        return RedisApi.set(RedisApi.createGotTokenKey(refresh_token, TokenType.REFRESH), id, 3600 * 24);
     }
 
     public static storeGotToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {

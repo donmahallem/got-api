@@ -1,7 +1,9 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
 import * as jwt from "jsonwebtoken";
 import { Config } from "./../config";
 import * as crypto from "crypto";
-import * as redis from "redis";
 import { RedisApi } from "./redis.api";
 import * as passportjs from "passport";
 import * as passportjsBearer from "passport-http-bearer";

@@ -1,17 +1,21 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 export {
     RedditHelper,
-    Scope,
-    Duration
+    Duration,
+    Scope
 } from "./reddit-helper";
 
 export {
-    Auth
+    Auth,
 } from "./auth";
 
 export {
-    RedisApi
+    RedisApi,
 } from "./redis.api";
 
 export {
-    GotMiddleware
+    GotMiddleware,
 } from "./got-middleware";

@@ -1,14 +1,16 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 import * as express from "express";
-import {
-    RedditHelper,
-    Scope
-} from "./../../util/reddit-helper";
 import { Config } from "./../../config";
 import {
     Auth,
-    JwtBody
 } from "./../../util/auth";
-
+import {
+    RedditHelper,
+    Scope,
+} from "./../../util/reddit-helper";
 
 let router: express.Router = express.Router();
 router.get("/oauth/reddit", (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -20,21 +22,21 @@ router.get("/oauth/reddit/authorize", (req: express.Request, res: express.Respon
     } else {
         RedditHelper.exchangeCode(req.query.code)
             .then((data) => {
-                return RedditHelper.getMe(data["access_token"])
+                return RedditHelper.getMe(data.access_token)
             })
             .then((user) => {
                 let accessTokenPromise: Promise<string> = Auth.signAccessToken({
                     user: {
                         id: user.id,
                         name: user.name
-                    }
-                });
+  ,                  }
+  ,              });
                 let refreshTokenPromise: Promise<string> = Auth.randomBytes(128)
                     .then((token) => {
                         return Auth.signRefreshToken({
                             user: user.id,
                             token: token.toString("hex")
-                        });
+    ,                    });
                     });
                 return Promise.all([accessTokenPromise, refreshTokenPromise]);
             })
@@ -43,13 +45,13 @@ router.get("/oauth/reddit/authorize", (req: express.Request, res: express.Respon
                     httpOnly: true,
                     secure: Config.cookiesSecure,
                     expires: new Date(Date.now() + (1000 * 3600 * 24))
-                };
+      ,          };
                 res.cookie("X-AUTH-TOKEN", jwts[0], authCookieOptions);
                 let refreshCookieOptions: express.CookieOptions = {
                     httpOnly: true,
                     secure: Config.cookiesSecure,
                     expires: new Date(Date.now() + (1000 * 3600 * 24 * 7))
-                };
+        ,        };
                 res.cookie("X-REFRESH-TOKEN", jwts[1], refreshCookieOptions);
                 res.redirect("/");
             })

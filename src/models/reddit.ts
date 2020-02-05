@@ -1,3 +1,7 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 
 export type RedditUser = {
     is_employee?: boolean;
@@ -31,7 +35,7 @@ export enum RedditThingType {
     MESSAGE = 4,
     SUBREDDIT = 5,
     AWARD = 6,
-    PROMO_CAMPAIGN = 8
+    PROMO_CAMPAIGN = 8,
 }
 
 export type RedditResponse<T> = {

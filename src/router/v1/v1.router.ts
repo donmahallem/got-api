@@ -1,3 +1,7 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 /*eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
 
 import * as express from "express";

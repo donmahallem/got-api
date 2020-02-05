@@ -1,3 +1,6 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
 import * as express from "express";
 import {
     RedditHelper,
@@ -8,7 +11,6 @@ import {
 import {
     Config
 } from "./../../../config";
-import * as through2 from "through2";
 
 export class RedditEndpoints {
     static readonly signin: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {

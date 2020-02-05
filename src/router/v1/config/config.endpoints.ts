@@ -5,9 +5,6 @@ import {
     Auth,
     Duration
 } from "./../../../util/";
-import {
-    Config
-} from "./../../../config";
 
 export class ConfigEndpoints {
 

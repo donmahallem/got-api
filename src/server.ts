@@ -1,8 +1,10 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
+import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as http from "http";
-import * as bodyParser from "body-parser";
-import * as serveStatic from "serve-static";
-import * as cookieParser from "cookie-parser";
 import { Config } from "./config";
 
 import * as api from "./router/api";

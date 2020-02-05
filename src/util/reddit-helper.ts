@@ -1,11 +1,11 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 import { Config } from "./../config";
-import { Auth } from "./auth";
 import {
     RedditUser,
     ExchangeTokenResponse,
-    RedditThing,
-    RedditSelftext,
-    RedditSubmission,
     RedditSubmissionListing
 } from "./../models/reddit";
 import * as https from "https";

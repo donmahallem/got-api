@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "mocha --opts ./test/.mocha.opts src/**/*.spec.ts",
+        "test": "mocha",
         "build": "tsc --sourceMap --outDir ./build/",
         "build:watch": "tsc --sourceMap --watch --outDir ./build/",
         "test:ci": "nyc npm run test",

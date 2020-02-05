@@ -1,34 +1,11 @@
+/*!
+ * Source https://github.com/donmahallem/got-api
+ */
+
 import * as nconf from "nconf";
 
 export class Config {
     private static _nconf: nconf.Provider
-    private static get nconf(): nconf.Provider {
-        if (Config._nconf == null) {
-            Config._nconf = new nconf.Provider({});
-            Config._nconf.file("config.json");
-            Config._nconf.defaults({
-                "cookies": {
-                    "secure": true
-                }
-            });
-            Config._nconf.argv({
-                "p": {
-                    alias: "port",
-                    describe: "The port to listen on",
-                    demand: true,
-                    type: "number"
-                }
-            });
-            Config._nconf.required(["reddit:client_id",
-                "reddit:client_secret",
-                "port"]);
-        }
-        return Config._nconf;
-    }
-
-    public static loadFile(file: string) {
-        Config._nconf.file(file);
-    }
 
     /**
      * gets the port for the server
@@ -74,5 +51,32 @@ export class Config {
 
     public static get jwtIssuer(): string {
         return Config.nconf.get("jwt:issuer");
+    }
+    private static get nconf(): nconf.Provider {
+        if (Config._nconf == undefined) {
+            Config._nconf = new nconf.Provider({});
+            Config._nconf.file("config.json");
+            Config._nconf.defaults({
+                "cookies": {
+                    "secure": true,
+                },
+            });
+            Config._nconf.argv({
+                "p": {
+                    alias: "port",
+                    describe: "The port to listen on",
+                    demand: true,
+                    type: "number",
+                },
+            });
+            Config._nconf.required(["reddit:client_id",
+                "reddit:client_secret",
+                "port"]);
+        }
+        return Config._nconf;
+    }
+
+    public static loadFile(file: string) {
+        Config._nconf.file(file);
     }
 }
