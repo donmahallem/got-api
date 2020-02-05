@@ -4,17 +4,13 @@
 
 import * as redis from "redis";
 import * as EventEmitter from "events";
-import * as through2 from "through2";
 import {
-    Readable,
-    Writable,
-    Duplex,
     Transform,
-    PassThrough
+    PassThrough,
 } from "stream";
 enum TokenType {
     ACCESS = 1,
-    REFRESH = 2
+    REFRESH = 2,
 }
 
 export type SetData = {
@@ -39,20 +35,20 @@ export class RedditFeedStream extends Transform {
 }
 
 export class RedisApi {
-    private static _redis: redis.RedisClient;
+    private static REDIS_INSTANCE: redis.RedisClient;
     private static redis(): Promise<redis.RedisClient> {
         return new Promise<redis.RedisClient>((resolve, reject) => {
-            if (this._redis == null) {
-                this._redis = redis.createClient();
+            if (RedisApi.REDIS_INSTANCE == null) {
+                RedisApi.REDIS_INSTANCE = redis.createClient();
                 let errorCallback = (err) => {
                     reject(err);
                 };
-                this._redis.on("ready", () => {
-                    this._redis.removeListener("error", errorCallback);
-                    resolve(this._redis);
+                RedisApi.REDIS_INSTANCE.on("ready", () => {
+                    RedisApi.REDIS_INSTANCE.removeListener("error", errorCallback);
+                    resolve(RedisApi.REDIS_INSTANCE);
                 }).on("error", errorCallback);
             }
-            resolve(this._redis);
+            resolve(RedisApi.REDIS_INSTANCE);
         });
     }
 
@@ -65,7 +61,7 @@ export class RedisApi {
     }
 
     private static setMulti(data: SetData[]): Promise<boolean> {
-        return this.redis()
+        return RedisApi.redis()
             .then(redisClient => {
                 return new Promise<boolean>((resolve, reject) => {
                     let multi = redisClient.multi();
@@ -88,7 +84,7 @@ export class RedisApi {
     }
 
     private static set(key: string, value: string, duration: number = -1): Promise<string> {
-        return this.redis().then(redisClient => {
+        return RedisApi.redis().then(redisClient => {
             return new Promise<string>((resolve, reject) => {
                 if (duration > 0) {
                     redisClient.set(key, value, "EX", duration, (err, cb) => {
@@ -139,7 +135,6 @@ export class RedisApi {
             emitter.push(JSON.parse(message));
         });
         sub.on("error", err => {
-            console.error(err);
             emitter.end();
         });
         sub.on("end", () => {
@@ -156,24 +151,24 @@ export class RedisApi {
     public static storeGotToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
         return this.setMulti([{
             key: this.createRedditTokenKey(user, TokenType.ACCESS),
+            ttl: 3600,
             value: acccess_token,
-            ttl: 3600
         }, {
             key: this.createRedditTokenKey(user, TokenType.REFRESH),
+            ttl: 3600 * 24,
             value: refresh_token,
-            ttl: 3600 * 24
         }]);
     }
 
     public static storeRedditToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
         return this.setMulti([{
             key: this.createRedditTokenKey(user, TokenType.ACCESS),
+            ttl: 3600,
             value: user,
-            ttl: 3600
         }, {
             key: this.createRedditTokenKey(user, TokenType.REFRESH),
+            ttl: 3600 * 24,
             value: user,
-            ttl: 3600 * 24
         }]);
     }
 
