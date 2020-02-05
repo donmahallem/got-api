@@ -22,7 +22,7 @@ export class Config {
     }
 
     public static set redditClientId(redditClientId: string) {
-
+        // TODO
     }
 
     /**
@@ -36,13 +36,13 @@ export class Config {
         return Config.nconf.get("reddit:redirect_uri");
     }
     public static set redditRedirectUri(redditRedirectUri: string) {
-
+        // TODO
     }
     public static get cookiesSecure(): boolean {
         return Config.nconf.get("cookies:secure");
     }
     public static set cookiesSecure(redditRedirectUri: boolean) {
-
+        // TODO
     }
 
     public static get jwtSecret(): string {
@@ -53,7 +53,7 @@ export class Config {
         return Config.nconf.get("jwt:issuer");
     }
     private static get nconf(): nconf.Provider {
-        if (Config._nconf == undefined) {
+        if (Config._nconf === undefined) {
             Config._nconf = new nconf.Provider({});
             Config._nconf.file("config.json");
             Config._nconf.defaults({
@@ -64,8 +64,8 @@ export class Config {
             Config._nconf.argv({
                 "p": {
                     alias: "port",
-                    describe: "The port to listen on",
                     demand: true,
+                    describe: "The port to listen on",
                     type: "number",
                 },
             });
