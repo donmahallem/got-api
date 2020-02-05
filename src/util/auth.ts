@@ -8,25 +8,23 @@ import { RedisApi } from "./redis.api";
 import * as passportjs from "passport";
 import * as passportjsBearer from "passport-http-bearer";
 
-
 passportjs.use(new passportjsBearer.Strategy((token, done) => {
-
+    //tslint:disable-next-line:no-console
+    console.log("Called");
 }));
 export enum Audience {
     USER = 1,
-    ADMIN = 2
+    ADMIN = 2,
 }
 
 export type JwtBody = {
     reddit: {
-        name: string;
         id: string;
-    }
+        name: string;
+    },
 }
 
 export class Auth {
-    private static readonly gotAccessTokenPrefix: string = "got:token:access:";
-    private static readonly gotRefreshTokenPrefix: string = "got:token:refresh:";
 
     public static randomBytes(length: number): Promise<Buffer> {
         return new Promise((resolve, reject) => {
@@ -41,32 +39,24 @@ export class Auth {
     }
 
     public static createAccessToken(user: { id: string, name: string }): Promise<string> {
-        return this.randomBytes(64)
-            .then(key => {
-                return this.signAccessToken({
-                    user: user,
-                    token: key.toString("hex")
-                });
-            });
+        return Auth.randomBytes(64)
+            .then(key => Auth.signAccessToken({
+                token: key.toString("hex"),
+                user: user,
+            }));
     }
 
     public static createRefreshToken(user: { id: string, name: string }): Promise<string> {
-        return this.randomBytes(64)
+        return Auth.randomBytes(64)
             .then(buf => {
                 let hexed = buf.toString("hex");
-                return RedisApi.storeRefreshToken(user.id, hexed).then(succes => {
-                    return hexed;
-                });
+                return RedisApi.storeRefreshToken(user.id, hexed).then(succes => hexed);
             })
-            .then(key => {
-                return this.signRefreshToken({
-                    user: user,
-                    token: key
-                });
-            });
+            .then(key => Auth.signRefreshToken({
+                token: key,
+                user: user,
+            }));
     }
-
-
 
     public static signAccessToken(data: string | JwtBody | any, expires: number | string = "5m"): Promise<string> {
         return Auth.sign(data, "acccess_token", expires);
@@ -78,12 +68,12 @@ export class Auth {
 
     public static sign(data: string | JwtBody | any, subject: string, expires: number | string = "1h"): Promise<string> {
         return new Promise((resolve, reject) => {
-            let options: jwt.SignOptions = {
+            const options: jwt.SignOptions = {
                 algorithm: "HS512",
                 audience: ["user"],
                 expiresIn: expires,
+                issuer: Config.jwtIssuer,
                 subject: subject,
-                issuer: Config.jwtIssuer
             };
             jwt.sign(data, Config.jwtSecret, options, (err, token) => {
                 if (err) {
@@ -97,10 +87,10 @@ export class Auth {
 
     public static verify(token: string): Promise<JwtBody | string | any> {
         return new Promise((resolve, reject) => {
-            let options: jwt.VerifyOptions = {
+            const options: jwt.VerifyOptions = {
                 algorithms: ["HS512"],
+                clockTolerance: 60,
                 issuer: Config.jwtIssuer,
-                clockTolerance: 60
             }
             jwt.verify(token, Config.jwtSecret, options, (error, decoded) => {
                 if (error) {

@@ -21,7 +21,7 @@ export class GotServer {
 
     public start() {
         this.http.listen(Config.port, () => {
-            //tslint:disable-next-line:no-console
+            // tslint:disable-next-line:no-console
             console.log("Server listening on port " + Config.port + "!");
         });
     }

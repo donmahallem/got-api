@@ -2,13 +2,13 @@
  * Source https://github.com/donmahallem/got-api
  */
 
+import * as https from "https";
 import { Config } from "./../config";
 import {
     ExchangeTokenResponse,
     RedditSubmissionListing,
     RedditUser,
 } from "./../models/reddit";
-import * as https from "https";
 export enum Scope {
     IDENTITY = 1,
     EDIT = 2,
@@ -47,13 +47,13 @@ export class RedditHelper {
     public static exchangeCode(code: string): Promise<ExchangeTokenResponse> {
         return new Promise((resolve, reject) => {
             const options: https.RequestOptions = {
-                host: 'www.reddit.com',
-                port: 443,
-                path: '/api/v1/access_token',
-                method: 'POST',
                 headers: {
                     Authorization: "Basic " + new Buffer(Config.redditClientId + ":" + Config.redditClientSecret).toString("base64"),
                 },
+                host: 'www.reddit.com',
+                method: 'POST',
+                path: '/api/v1/access_token',
+                port: 443,
             };
             const req = https.request(options, (res) => {
                 let body = "";

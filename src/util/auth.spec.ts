@@ -9,6 +9,6 @@ import { Auth } from "./auth";
 
 describe("Hello function", () => {
     it("should return hello world", () => {
-        expect(Auth.tt()).to.be.true;
+        expect(Auth).to.not.equal(undefined);
     });
 });

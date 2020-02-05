@@ -19,3 +19,5 @@ export {
 export {
     GotMiddleware,
 } from "./got-middleware";
+export * from "./reddit-feed-emitter";
+export * from "./reddit-feed-stream";
