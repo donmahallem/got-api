@@ -1,15 +1,15 @@
 /*!
  * Source https://github.com/donmahallem/got-api
  */
-import * as jwt from "jsonwebtoken";
-import { Config } from "./../config";
 import * as crypto from "crypto";
-import { RedisApi } from "./redis.api";
+import * as jwt from "jsonwebtoken";
 import * as passportjs from "passport";
 import * as passportjsBearer from "passport-http-bearer";
+import { Config } from "./../config";
+import { RedisApi } from "./redis.api";
 
 passportjs.use(new passportjsBearer.Strategy((token, done) => {
-    //tslint:disable-next-line:no-console
+    // tslint:disable-next-line:no-console
     console.log("Called");
 }));
 export enum Audience {
@@ -42,19 +42,19 @@ export class Auth {
         return Auth.randomBytes(64)
             .then(key => Auth.signAccessToken({
                 token: key.toString("hex"),
-                user: user,
+                user,
             }));
     }
 
     public static createRefreshToken(user: { id: string, name: string }): Promise<string> {
         return Auth.randomBytes(64)
             .then(buf => {
-                let hexed = buf.toString("hex");
+                const hexed = buf.toString("hex");
                 return RedisApi.storeRefreshToken(user.id, hexed).then(succes => hexed);
             })
             .then(key => Auth.signRefreshToken({
                 token: key,
-                user: user,
+                user,
             }));
     }
 
@@ -73,7 +73,7 @@ export class Auth {
                 audience: ["user"],
                 expiresIn: expires,
                 issuer: Config.jwtIssuer,
-                subject: subject,
+                subject,
             };
             jwt.sign(data, Config.jwtSecret, options, (err, token) => {
                 if (err) {

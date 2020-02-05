@@ -20,74 +20,6 @@ export type SetData = {
 
 export class RedisApi {
     private static REDIS_INSTANCE: redis.RedisClient;
-    private static redis(): Promise<redis.RedisClient> {
-        return new Promise<redis.RedisClient>((resolve, reject) => {
-            if (RedisApi.REDIS_INSTANCE === undefined) {
-                RedisApi.REDIS_INSTANCE = redis.createClient();
-                const errorCallback = (err) => {
-                    reject(err);
-                };
-                RedisApi.REDIS_INSTANCE.on("ready", () => {
-                    RedisApi.REDIS_INSTANCE.removeListener("error", errorCallback);
-                    resolve(RedisApi.REDIS_INSTANCE);
-                }).on("error", errorCallback);
-            }
-            resolve(RedisApi.REDIS_INSTANCE);
-        });
-    }
-
-    private static createRedditTokenKey(user: string, type: TokenType): string {
-        return "token:" + user + ":reddit:" + (type === TokenType.ACCESS) ? "accesss" : "refresh";
-    }
-
-    private static createGotTokenKey(token: string, type: TokenType): string {
-        return "token:got:" + (type === TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
-    }
-
-    private static setMulti(data: SetData[]): Promise<boolean> {
-        return RedisApi.redis()
-            .then(redisClient => new Promise<boolean>((resolve, reject) => {
-                let multi = redisClient.multi();
-                for (let d of data) {
-                    if (d.ttl > 0) {
-                        multi.set(d.key, d.value, "EX", d.ttl);
-                    } else {
-                        multi.set(d.key, d.value);
-                    }
-                }
-                multi.exec((err, cb) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(true);
-                    }
-                })
-            }));
-    }
-
-    private static set(key: string, value: string, duration: number = -1): Promise<string> {
-        return RedisApi.redis().then(redisClient => {
-            return new Promise<string>((resolve, reject) => {
-                if (duration > 0) {
-                    redisClient.set(key, value, "EX", duration, (err, cb) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(cb);
-                        }
-                    });
-                } else {
-                    redisClient.set(key, value, (err, cb) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(cb);
-                        }
-                    });
-                }
-            });
-        });
-    }
 
     public static redditFeed(): RedditFeedEmitter {
         const sub = redis.createClient();
@@ -151,6 +83,73 @@ export class RedisApi {
             ttl: 3600 * 24,
             value: user,
         }]);
+    }
+    private static redis(): Promise<redis.RedisClient> {
+        return new Promise<redis.RedisClient>((resolve, reject) => {
+            if (RedisApi.REDIS_INSTANCE === undefined) {
+                RedisApi.REDIS_INSTANCE = redis.createClient();
+                const errorCallback = (err) => {
+                    reject(err);
+                };
+                RedisApi.REDIS_INSTANCE.on("ready", () => {
+                    RedisApi.REDIS_INSTANCE.removeListener("error", errorCallback);
+                    resolve(RedisApi.REDIS_INSTANCE);
+                }).on("error", errorCallback);
+            }
+            resolve(RedisApi.REDIS_INSTANCE);
+        });
+    }
+
+    private static createRedditTokenKey(user: string, type: TokenType): string {
+        return "token:" + user + ":reddit:" + (type === TokenType.ACCESS) ? "accesss" : "refresh";
+    }
+
+    private static createGotTokenKey(token: string, type: TokenType): string {
+        return "token:got:" + (type === TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
+    }
+
+    private static setMulti(data: SetData[]): Promise<boolean> {
+        return RedisApi.redis()
+            .then(redisClient => new Promise<boolean>((resolve, reject) => {
+                const multi = redisClient.multi();
+                for (const d of data) {
+                    if (d.ttl > 0) {
+                        multi.set(d.key, d.value, "EX", d.ttl);
+                    } else {
+                        multi.set(d.key, d.value);
+                    }
+                }
+                multi.exec((err, cb) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(true);
+                    }
+                })
+            }));
+    }
+
+    private static set(key: string, value: string, duration: number = -1): Promise<string> {
+        return RedisApi.redis().then(redisClient =>
+            new Promise<string>((resolve, reject) => {
+                if (duration > 0) {
+                    redisClient.set(key, value, "EX", duration, (err, cb) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(cb);
+                        }
+                    });
+                } else {
+                    redisClient.set(key, value, (err, cb) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(cb);
+                        }
+                    });
+                }
+            }));
     }
 
 }
