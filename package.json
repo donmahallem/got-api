@@ -8,6 +8,8 @@
         "build": "tsc --sourceMap --outDir ./build/",
         "build:watch": "tsc --sourceMap --watch --outDir ./build/",
         "test:ci": "nyc npm run test",
+        "lint": "tslint -c tslint.json -p tsconfig-lint.json src/**/*.ts",
+        "lint:fix": "tslint --fix -c tslint.json -p tsconfig-lint.json src/**/*.ts",
         "start": "npm run build:live",
         "build:live": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts --port 80",
         "build-crawler:live": "nodemon --watch src/**/*.ts --exec ts-node src/crawler.ts",
@@ -69,6 +71,7 @@
         "sinon-chai": "~3.2.0",
         "supertest": "~4.0.2",
         "ts-node": "~8.0.2",
+        "tslint": "^6.0.0",
         "typedoc": "~0.15.0",
         "typescript": "~3.3.3"
     },
