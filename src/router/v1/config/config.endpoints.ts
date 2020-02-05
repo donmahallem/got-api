@@ -4,17 +4,16 @@
 
 import * as express from "express";
 import {
+    Duration,
     RedditHelper,
     Scope,
-    Auth,
-    Duration
 } from "./../../../util/";
 
 export class ConfigEndpoints {
 
     static readonly getConfig: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        let val: any = {
-            "redirect_uri": RedditHelper.createAuthorizeUrl([Scope.VOTE, Scope.IDENTITY], "random_state", Duration.PERMANENT)
+        const val: any = {
+            "redirect_uri": RedditHelper.createAuthorizeUrl([Scope.VOTE, Scope.IDENTITY], "random_state", Duration.PERMANENT),
         }
         res.json(val);
     }
