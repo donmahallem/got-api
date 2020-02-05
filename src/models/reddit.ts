@@ -2,7 +2,6 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-
 export type RedditUser = {
     is_employee?: boolean;
     name: string;
@@ -26,6 +25,7 @@ export interface RedditSelftext extends RedditThing {
 }
 
 export interface RedditSubmission extends RedditThing {
+    tmp?: boolean;
 }
 
 export enum RedditThingType {
