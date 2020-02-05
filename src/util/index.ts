@@ -5,7 +5,7 @@
 export {
     RedditHelper,
     Duration,
-    Scope
+    Scope,
 } from "./reddit-helper";
 
 export {

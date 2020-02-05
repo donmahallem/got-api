@@ -1,6 +1,7 @@
 /*!
  * Source https://github.com/donmahallem/got-api
  */
+
 import * as express from "express";
 import {
     RedditHelper,
