@@ -7,10 +7,10 @@ import {
     RedditHelper,
     Scope,
     Auth,
-    RedisApi
+    RedisApi,
 } from "./../../../util/";
 import {
-    Config
+    Config,
 } from "./../../../config";
 
 export class RedditEndpoints {
@@ -23,37 +23,37 @@ export class RedditEndpoints {
         } else {
             RedditHelper.exchangeCode(req.query.code)
                 .then((data) => {
-                    return RedditHelper.getMe(data["access_token"])
+                    return RedditHelper.getMe(data.access_token)
                 })
                 .then((user) => {
-                    let accessTokenPromise: Promise<string> = Auth.signAccessToken({
+                    const accessTokenPromise: Promise<string> = Auth.signAccessToken({
                         user: {
                             id: user.id,
-                            name: user.name
-                        }
+                            name: user.name,
+                        },
                     }).then(value => {
                         return value;
                     });
-                    let refreshTokenPromise: Promise<string> = Auth.randomBytes(128)
+                    const refreshTokenPromise: Promise<string> = Auth.randomBytes(128)
                         .then((token) => {
                             return Auth.signRefreshToken({
+                                token: token.toString("hex"),
                                 user: user.id,
-                                token: token.toString("hex")
                             });
                         });
                     return Promise.all([accessTokenPromise, refreshTokenPromise]);
                 })
                 .then((jwts) => {
-                    let authCookieOptions: express.CookieOptions = {
+                    const authCookieOptions: express.CookieOptions = {
+                        expires: new Date(Date.now() + (1000 * 3600 * 24)),
                         httpOnly: true,
                         secure: Config.cookiesSecure,
-                        expires: new Date(Date.now() + (1000 * 3600 * 24))
                     };
                     res.cookie("X-AUTH-TOKEN", jwts[0], authCookieOptions);
-                    let refreshCookieOptions: express.CookieOptions = {
+                    const refreshCookieOptions: express.CookieOptions = {
+                        expires: new Date(Date.now() + (1000 * 3600 * 24 * 7)),
                         httpOnly: true,
                         secure: Config.cookiesSecure,
-                        expires: new Date(Date.now() + (1000 * 3600 * 24 * 7))
                     };
                     res.cookie("X-REFRESH-TOKEN", jwts[1], refreshCookieOptions);
                     res.redirect("/");
@@ -65,18 +65,17 @@ export class RedditEndpoints {
     }
 
     public static getLive: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        //req.socket.setTimeout(Infinity);
+        // req.socket.setTimeout(Infinity);
         req.connection.setTimeout(1000000);
         res.writeHead(200, {
-            'Content-Type': 'text/event-stream',
             'Cache-Control': 'no-cache',
             'Connection': 'keep-alive',
+            'Content-Type': 'text/event-stream',
             'Transfer-Encoding': 'chunked',
-            'X-Content-Type-Options': 'nosniff'
+            'X-Content-Type-Options': 'nosniff',
         });
-        let emitter = RedisApi.redditFeed();
+        const emitter = RedisApi.redditFeed();
         emitter.on("message", submission => {
-            console.log("push sub", submission.id);
             res.write("event: submission\n");
             res.write("id: " + parseInt(submission.id, 36) + "\n");
             res.write("data: ");
