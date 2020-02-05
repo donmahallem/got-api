@@ -3,11 +3,10 @@
  */
 
 import * as redis from "redis";
-import * as EventEmitter from "events";
 import {
-    Transform,
     PassThrough,
 } from "stream";
+import { RedditFeedEmitter } from "./reddit-feed-emitter";
 enum TokenType {
     ACCESS = 1,
     REFRESH = 2,
@@ -19,28 +18,13 @@ export type SetData = {
     ttl?: number;
 }
 
-export class RedditFeedEmitter extends EventEmitter {
-    private sub: redis.RedisClient;
-    constructor(sub: redis.RedisClient) {
-        super();
-        this.sub = sub;
-    }
-
-    public quit() {
-        this.sub.quit();
-    }
-}
-
-export class RedditFeedStream extends Transform {
-}
-
 export class RedisApi {
     private static REDIS_INSTANCE: redis.RedisClient;
     private static redis(): Promise<redis.RedisClient> {
         return new Promise<redis.RedisClient>((resolve, reject) => {
-            if (RedisApi.REDIS_INSTANCE == null) {
+            if (RedisApi.REDIS_INSTANCE === undefined) {
                 RedisApi.REDIS_INSTANCE = redis.createClient();
-                let errorCallback = (err) => {
+                const errorCallback = (err) => {
                     reject(err);
                 };
                 RedisApi.REDIS_INSTANCE.on("ready", () => {
@@ -53,34 +37,32 @@ export class RedisApi {
     }
 
     private static createRedditTokenKey(user: string, type: TokenType): string {
-        return "token:" + user + ":reddit:" + (type == TokenType.ACCESS) ? "accesss" : "refresh";
+        return "token:" + user + ":reddit:" + (type === TokenType.ACCESS) ? "accesss" : "refresh";
     }
 
     private static createGotTokenKey(token: string, type: TokenType): string {
-        return "token:got:" + (type == TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
+        return "token:got:" + (type === TokenType.ACCESS) ? "accesss:" : "refresh:" + token;
     }
 
     private static setMulti(data: SetData[]): Promise<boolean> {
         return RedisApi.redis()
-            .then(redisClient => {
-                return new Promise<boolean>((resolve, reject) => {
-                    let multi = redisClient.multi();
-                    for (let d of data) {
-                        if (d.ttl > 0) {
-                            multi.set(d.key, d.value, "EX", d.ttl);
-                        } else {
-                            multi.set(d.key, d.value);
-                        }
+            .then(redisClient => new Promise<boolean>((resolve, reject) => {
+                let multi = redisClient.multi();
+                for (let d of data) {
+                    if (d.ttl > 0) {
+                        multi.set(d.key, d.value, "EX", d.ttl);
+                    } else {
+                        multi.set(d.key, d.value);
                     }
-                    multi.exec((err, cb) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(true);
-                        }
-                    })
-                });
-            });
+                }
+                multi.exec((err, cb) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(true);
+                    }
+                })
+            }));
     }
 
     private static set(key: string, value: string, duration: number = -1): Promise<string> {
@@ -108,9 +90,9 @@ export class RedisApi {
     }
 
     public static redditFeed(): RedditFeedEmitter {
-        let sub = redis.createClient();
-        let emitter: RedditFeedEmitter = new RedditFeedEmitter(sub);
-        sub.on("message", function (channel, message) {
+        const sub = redis.createClient();
+        const emitter: RedditFeedEmitter = new RedditFeedEmitter(sub);
+        sub.on("message", (channel, message) => {
             emitter.emit("message", JSON.parse(message));
         });
         sub.on("error", err => {
@@ -123,15 +105,14 @@ export class RedisApi {
         return emitter;
     }
 
-
     public static redditFeedStream(): PassThrough {
-        let sub = redis.createClient();
-        let emitter: PassThrough = new PassThrough({
+        const sub = redis.createClient();
+        const emitter: PassThrough = new PassThrough({
+            objectMode: true,
             readableObjectMode: true,
             writableObjectMode: true,
-            objectMode: true
         });
-        sub.on("message", function (channel, message) {
+        sub.on("message", (channel, message) => {
             emitter.push(JSON.parse(message));
         });
         sub.on("error", err => {
@@ -144,29 +125,29 @@ export class RedisApi {
         return emitter;
     }
 
-    public static storeRefreshToken(id: string, refresh_token: string): Promise<string> {
-        return RedisApi.set(RedisApi.createGotTokenKey(refresh_token, TokenType.REFRESH), id, 3600 * 24);
+    public static storeRefreshToken(id: string, refreshToken: string): Promise<string> {
+        return RedisApi.set(RedisApi.createGotTokenKey(refreshToken, TokenType.REFRESH), id, 3600 * 24);
     }
 
-    public static storeGotToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
-        return this.setMulti([{
-            key: this.createRedditTokenKey(user, TokenType.ACCESS),
+    public static storeGotToken(user: string, acccessToken: string, refreshToken: string): Promise<boolean> {
+        return RedisApi.setMulti([{
+            key: RedisApi.createRedditTokenKey(user, TokenType.ACCESS),
             ttl: 3600,
-            value: acccess_token,
+            value: acccessToken,
         }, {
-            key: this.createRedditTokenKey(user, TokenType.REFRESH),
+            key: RedisApi.createRedditTokenKey(user, TokenType.REFRESH),
             ttl: 3600 * 24,
-            value: refresh_token,
+            value: refreshToken,
         }]);
     }
 
-    public static storeRedditToken(user: string, acccess_token: string, refresh_token: string): Promise<boolean> {
-        return this.setMulti([{
-            key: this.createRedditTokenKey(user, TokenType.ACCESS),
+    public static storeRedditToken(user: string, acccessToken: string, refreshToken: string): Promise<boolean> {
+        return RedisApi.setMulti([{
+            key: RedisApi.createRedditTokenKey(user, TokenType.ACCESS),
             ttl: 3600,
             value: user,
         }, {
-            key: this.createRedditTokenKey(user, TokenType.REFRESH),
+            key: RedisApi.createRedditTokenKey(user, TokenType.REFRESH),
             ttl: 3600 * 24,
             value: user,
         }]);
