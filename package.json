@@ -27,7 +27,7 @@
         "@types/mocha": "~7.0.2",
         "@types/nconf": "~0.10.0",
         "@types/node": "~13.9.0",
-        "@types/passport": "~1.0.0",
+        "@types/passport": "~1.0.3",
         "@types/passport-http-bearer": "~1.0.30",
         "@types/redis": "~2.8.16",
         "@types/serve-static": "~1.13.3",
