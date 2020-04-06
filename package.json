@@ -28,7 +28,7 @@
         "@types/nconf": "~0.10.0",
         "@types/node": "~13.11.0",
         "@types/passport": "~1.0.3",
-        "@types/passport-http-bearer": "~1.0.30",
+        "@types/passport-http-bearer": "~1.0.35",
         "@types/redis": "~2.8.17",
         "@types/serve-static": "~1.13.3",
         "@types/sinon": "~9.0.0",
