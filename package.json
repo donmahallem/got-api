@@ -41,7 +41,7 @@
         "express": "~4.17.1",
         "helmet": "~3.22.0",
         "jsonwebtoken": "~8.5.1",
-        "moment": "~2.25.0",
+        "moment": "~2.25.1",
         "nconf": "~0.10.0",
         "passport": "~0.4.0",
         "passport-http-bearer": "~1.0.1",
