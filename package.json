@@ -63,7 +63,7 @@
         "karma-chai": "~0.1.0",
         "karma-mocha": "~2.0.1",
         "karma-sinon": "~1.0.5",
-        "mocha": "~7.2.0",
+        "mocha": "~8.0.1",
         "nodemon": "~2.0.4",
         "nyc": "~15.1.0",
         "remap-istanbul": "~0.13.0",
