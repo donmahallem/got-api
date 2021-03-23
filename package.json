@@ -40,7 +40,7 @@
         "@types/cookie-parser": "1.4.2",
         "@types/expect": "24.3.0",
         "@types/express": "4.17.11",
-        "@types/jsonwebtoken": "8.5.0",
+        "@types/jsonwebtoken": "8.5.1",
         "@types/mocha": "8.0.0",
         "@types/nconf": "0.10.0",
         "@types/node": "14.0.22",
