@@ -1,11 +1,19 @@
 {
     "compilerOptions": {
+        "target": "es2018",
         "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": false,
-        "sourceMap": false,
-        "typeRoots": [
-            "node_modules/@types"
-        ]
-    }
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "declaration": true,
+        "moduleResolution": "node",
+        "strictNullChecks": true,
+        "noUnusedLocals": true
+    },
+    "typeAcquisition": {
+        "enable": true
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "baseUrl": "./src"
 }

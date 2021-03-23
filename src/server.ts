@@ -3,7 +3,7 @@
  */
 
 import * as bodyParser from "body-parser";
-import * as express from "express";
+import express from "express";
 import * as http from "http";
 import { Config } from "./config";
 

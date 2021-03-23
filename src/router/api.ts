@@ -2,7 +2,7 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 import * as v1Router from "./v1/v1.router";
 
 const apiRouter = express.Router();
