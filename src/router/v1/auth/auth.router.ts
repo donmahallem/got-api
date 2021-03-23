@@ -2,9 +2,8 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 import { AuthEndpoints } from "./auth.endpoints";
 
-const router: express.Router = express.Router();
-router.post("/token", AuthEndpoints.token);
-export = router;
+export const authRouter: express.Router = express.Router();
+authRouter.post("/token", AuthEndpoints.token);

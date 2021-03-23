@@ -2,7 +2,7 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 
 export class UserEndpoints {
     static readonly getMe: express.RequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {

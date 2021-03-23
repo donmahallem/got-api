@@ -3,11 +3,11 @@
  */
 
 import * as bodyParser from "body-parser";
-import * as express from "express";
+import express from "express";
 import * as http from "http";
 import { Config } from "./config";
 
-import * as api from "./router/api";
+import { apiRouter } from "./router/api";
 
 export class GotServer {
     private app: express.Application;
@@ -16,7 +16,7 @@ export class GotServer {
         this.app = express();
         this.http = http.createServer(this.app);
         this.app.use(bodyParser.json());
-        this.app.use(api);
+        this.app.use(apiRouter);
     }
 
     public start() {

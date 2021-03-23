@@ -2,7 +2,7 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 import {
     Auth,
     RedditHelper,
@@ -32,14 +32,14 @@ export class AuthEndpoints {
                     .then((resp) =>
                         RedditHelper.getMe(resp.access_token)
                             .then(me =>
-                                ({
-                                    access_token: resp.access_token,
-                                    id: me.id,
-                                    name: me.name,
-                                    refresh_token: resp.refresh_token,
-                                })))
+                            ({
+                                access_token: resp.access_token,
+                                id: me.id,
+                                name: me.name,
+                                refresh_token: resp.refresh_token,
+                            })))
                     .then(data =>
-                        RedisApi.storeRedditToken(data.id, data.access_token, data.refresh_token)
+                        RedisApi.storeRedditToken(data.id, data.access_token, data.refresh_token as string)
                             .then(success => data))
                     .then(data => {
                         const user = {
@@ -48,12 +48,12 @@ export class AuthEndpoints {
                         };
                         return Promise.all([Auth.createAccessToken(user), Auth.createRefreshToken(user)])
                             .then(results =>
-                                ({
-                                    access_token: results[0],
-                                    id: data.id,
-                                    name: data.name,
-                                    refresh_token: results[1],
-                                }));
+                            ({
+                                access_token: results[0],
+                                id: data.id,
+                                name: data.name,
+                                refresh_token: results[1],
+                            }));
                     })
                     .then(data => {
                         res.json({

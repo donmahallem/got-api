@@ -2,7 +2,7 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 import { Config } from "./../../config";
 import {
     Auth,
@@ -20,7 +20,7 @@ router.get("/oauth/reddit/authorize", (req: express.Request, res: express.Respon
     if (typeof req.query.code === "undefined") {
         next(new Error("No code argument provided"));
     } else {
-        RedditHelper.exchangeCode(req.query.code)
+        RedditHelper.exchangeCode(req.query.code as string)
             .then((data) =>
                 RedditHelper.getMe(data.access_token))
             .then((user) => {

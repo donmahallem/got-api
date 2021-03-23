@@ -113,7 +113,7 @@ export class RedisApi {
             .then(redisClient => new Promise<boolean>((resolve, reject) => {
                 const multi = redisClient.multi();
                 for (const d of data) {
-                    if (d.ttl > 0) {
+                    if (d.ttl && d.ttl > 0) {
                         multi.set(d.key, d.value, "EX", d.ttl);
                     } else {
                         multi.set(d.key, d.value);
@@ -137,7 +137,7 @@ export class RedisApi {
                         if (err) {
                             reject(err);
                         } else {
-                            resolve(cb);
+                            resolve(cb || 'OK');
                         }
                     });
                 } else {

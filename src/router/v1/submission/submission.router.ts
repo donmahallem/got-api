@@ -2,10 +2,9 @@
  * Source https://github.com/donmahallem/got-api
  */
 
-import * as express from "express";
+import express from "express";
 import { SubmissionEndpoints } from "./submission.endpoints";
 
-const router: express.Router = express.Router();
-router.get("/me", SubmissionEndpoints.getMe);
-router.get("/:id", SubmissionEndpoints.getUser);
-export = router;
+export const submissionRouter: express.Router = express.Router();
+submissionRouter.get("/me", SubmissionEndpoints.getMe);
+submissionRouter.get("/:id", SubmissionEndpoints.getUser);
