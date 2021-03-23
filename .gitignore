@@ -8,4 +8,5 @@ coverage
 config.json
 
 /build/*
+/dist/*
 /.nyc_output/*
