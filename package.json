@@ -19,7 +19,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "argparse": "~1.0.9",
+        "argparse": "~1.0.10",
         "body-parser": "~1.19.0",
         "cookie": "~0.4.1",
         "cookie-parser": "~1.4.5",
